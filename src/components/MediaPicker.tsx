@@ -21,6 +21,7 @@ export function MediaPicker() {
   return (
     <>
       <input
+        name="media"
         type="file"
         id="media"
         className="sr-only"
