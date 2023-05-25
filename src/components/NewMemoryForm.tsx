@@ -16,9 +16,9 @@ export function NewMemoryForm() {
     const formData = new FormData(event.currentTarget)
 
     let coverUrl = ''
-    const fileToUpload = formData.get('media')
+    const fileToUpload = formData.get('media') as File
 
-    if (fileToUpload) {
+    if (fileToUpload.size > 0) {
       const uploadFormData = new FormData()
       uploadFormData.set('media', fileToUpload)
 
