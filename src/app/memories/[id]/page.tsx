@@ -4,6 +4,8 @@ import { api } from '@/lib/api'
 import { IMemory } from '@/types/memoryDetail'
 import { formatDate } from '@/util/dateformat'
 import { cookies } from 'next/headers'
+import { getUser } from '@/lib/auth'
+import { UpdateTaskForm } from '@/components/UpdateMemoryForm'
 
 export default async function DetailsMemoryPage({
   params,
@@ -12,6 +14,7 @@ export default async function DetailsMemoryPage({
 }) {
   const { id } = params
   const token = cookies().get('token')?.value
+  const { sub } = getUser()
 
   const response = await api.get(`/memories/${id}`, {
     headers: {
@@ -19,18 +22,26 @@ export default async function DetailsMemoryPage({
     },
   })
 
-  const { content, coverUrl, createdAt }: IMemory = response.data
+  const memory: IMemory = response.data
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-16">
       <GoBack />
-      <div className="space-y-4">
-        <time className="-ml-16 flex items-center gap-2 text-sm text-gray-100 before:h-px before:w-5 before:bg-gray-50">
-          {formatDate(createdAt)}
-        </time>
-        {coverUrl.length > 0 && <MediaCover coverUrl={coverUrl} />}
-        <p className="text-lg leading-relaxed text-gray-100">{content}</p>
-      </div>
+      <time className="-ml-16 flex items-center gap-2 text-sm text-gray-100 before:h-px before:w-5 before:bg-gray-50">
+        {formatDate(memory.createdAt)}
+      </time>
+      {sub !== memory.userId ? (
+        <div className="space-y-4">
+          {memory.coverUrl.length > 0 && (
+            <MediaCover coverUrl={memory.coverUrl} />
+          )}
+          <p className="text-lg leading-relaxed text-gray-100">
+            {memory.content}
+          </p>
+        </div>
+      ) : (
+        <UpdateTaskForm memory={memory} />
+      )}
     </div>
   )
 }
