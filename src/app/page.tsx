@@ -43,6 +43,7 @@ export default async function Home() {
               {memory.excerpt}
             </p>
             <Link
+              as={`/memories/${memory.id}`}
               href={`/memories/${memory.id}`}
               className="flex items-center gap-2 text-sm text-gray-200 hover:text-gray-100"
             >
