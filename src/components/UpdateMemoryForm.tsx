@@ -6,8 +6,13 @@ import { api } from '@/lib/api'
 import cookie from 'js-cookie'
 import { MediaPicker } from './MediaPicker'
 import { useRouter } from 'next/navigation'
+import { IMemory } from '@/types/memoryDetail'
 
-export function NewMemoryForm() {
+interface IUpdateMemoryFormProps {
+  memory: IMemory
+}
+
+export function UpdateTaskForm({ memory }: IUpdateMemoryFormProps) {
   const router = useRouter()
 
   const handleCreateMemory = async (event: FormEvent<HTMLFormElement>) => {
@@ -15,7 +20,7 @@ export function NewMemoryForm() {
 
     const formData = new FormData(event.currentTarget)
 
-    let coverUrl = ''
+    let coverUrl = memory.coverUrl
     const fileToUpload = formData.get('media') as File
 
     if (fileToUpload.size > 0) {
@@ -29,8 +34,9 @@ export function NewMemoryForm() {
 
     const token = cookie.get('token')
 
-    await api.post(
-      '/memories',
+    console.log(formData.get('isPublic'))
+    await api.put(
+      `/memories/${memory.id}`,
       {
         coverUrl,
         content: formData.get('content'),
@@ -64,18 +70,19 @@ export function NewMemoryForm() {
             type="checkbox"
             name="isPublic"
             id="isPublic"
-            value="true"
+            defaultChecked={memory.isPublic}
             className="h-4 w-4 rounded border-gray-400 bg-gray-700 text-purple-500"
           />
           Tornar memória pública
         </label>
       </div>
-      <MediaPicker />
+      <MediaPicker previewUrl={memory.coverUrl} />
       <textarea
         name="content"
-        spellCheck
+        spellCheck="false"
         className="w-full flex-1 resize-none rounded border-0 bg-transparent p-0 text-lg leading-relaxed text-gray-100 placeholder:text-gray-400 focus:ring-0"
         placeholder="Fique livre para adicionar fotos, vídeos e relatos sobre essa expriência que você quer lembrar para sempre."
+        defaultValue={memory.content}
       />
       <button
         type="submit"

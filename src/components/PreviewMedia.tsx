@@ -1,8 +1,14 @@
+import { MediaCover } from './MediaCover'
+
 interface PreviewProps {
-  preview: string[] | null
+  preview: string | null | Array<string>
 }
 
 export function PreviewMedia({ preview }: PreviewProps) {
+  if (preview !== null && typeof preview === 'string') {
+    return <MediaCover coverUrl={preview} />
+  }
+
   if (preview !== null) {
     const fileType = preview[1]
 
