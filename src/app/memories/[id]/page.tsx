@@ -6,6 +6,7 @@ import { formatDate } from '@/util/dateformat'
 import { cookies } from 'next/headers'
 import { getUser } from '@/lib/auth'
 import { UpdateTaskForm } from '@/components/UpdateMemoryForm'
+import { DeleteMemoryButton } from '@/components/DeleteMemoryButton'
 
 export default async function DetailsMemoryPage({
   params,
@@ -40,7 +41,10 @@ export default async function DetailsMemoryPage({
           </p>
         </div>
       ) : (
-        <UpdateTaskForm memory={memory} />
+        <>
+          <UpdateTaskForm memory={memory} />
+          <DeleteMemoryButton id={memory.id} />
+        </>
       )}
     </div>
   )
