@@ -79,7 +79,7 @@ _Remember to keep your GitHub Client ID and Client Secret secure and never expos
 
 2. Change into the project directory: 
 ```cl
-cd time-capsule
+cd spacetime-web
 ```
 
 3. Install dependencies using npm:
